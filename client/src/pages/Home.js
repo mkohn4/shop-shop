@@ -7,8 +7,8 @@ const Home = () => {
 
   return (
     <div className="container">
-      <CategoryMenu setCategory={setCategory} />
-      <ProductList currentCategory={currentCategory} />
+      <CategoryMenu />
+      <ProductList />
     </div>
   );
 };
