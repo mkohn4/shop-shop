@@ -6,7 +6,8 @@ import { QUERY_PRODUCTS } from '../utils/queries';
 import spinner from '../assets/spinner.gif';
 
 import {useStoreContext} from '../utils/GlobalState';
-import {UPDATE_PRODUCTS} from '../utils/actions';
+import {UPDATE_PRODUCTS, REMOVE_FROM_CART, UPDATE_CART_QUANTITY, ADD_TO_CART} from '../utils/actions';
+import Cart from '../components/Cart';
 
 function Detail() {
 
@@ -19,6 +20,13 @@ function Detail() {
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
   const {products} = state;
+
+  const addToCart = () => {
+    dispatch({
+      type: ADD_TO_CART,
+      product: {...currentProduct, purchaseQuantity: 1}
+    });
+  };
 
   useEffect(() => {
     if (products.length) {
@@ -43,7 +51,7 @@ function Detail() {
 
           <p>
             <strong>Price:</strong>${currentProduct.price}{' '}
-            <button>Add to Cart</button>
+            <button onClick={addToCart}>Add to Cart</button>
             <button>Remove from Cart</button>
           </p>
 
@@ -54,6 +62,7 @@ function Detail() {
         </div>
       ) : null}
       {loading ? <img src={spinner} alt="loading" /> : null}
+      <Cart/>
     </>
   );
 }
