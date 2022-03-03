@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { pluralize } from "../../utils/helpers"
 import {useStoreContext} from '../../utils/GlobalState';
-import { ADD_TO_CART, UPDATE_CART_QUANTITY} from '../../utils/actions';
+import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART_QUANTITY} from '../../utils/actions';
 
 function ProductItem(item) {
   const {
@@ -16,11 +16,31 @@ function ProductItem(item) {
   const [state, dispatch] = useStoreContext();
 
   const addToCart = () => {
-    dispatch({
-      type: ADD_TO_CART,
-      product: {...item, purchaseQuantity: 1}
-    });
+    //find cart item with the matching id and return true if true
+    const itemInCart = cart.find((cartItem) => cartItem._id === _id);
+    //if theres a match, call update with a new purchase quantity
+    if (itemInCart) {
+      dispatch({
+        type: UPDATE_CART_QUANTITY,
+        //why is this both _id and the detail page is just id?
+        _id: _id,
+        purchaseQuantity: parseInt(itemInCart.purchaseQuantity)+1
+      });
+    } else {
+      dispatch({
+        type: ADD_TO_CART,
+        product: {...item, purchaseQuantity: 1}
+      });
+    }
+ 
   };
+
+  const removeFromCart = () => {
+    dispatch({
+      type: REMOVE_FROM_CART,
+      _id: currentProduct._id
+    });
+  }
 
   return (
     <div className="card px-1 py-1">
